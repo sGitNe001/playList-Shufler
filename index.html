@@ -57,7 +57,7 @@
             var remainingVideos = finalPlaylist.slice(1).join(',');
             
             // FIXED: Using a public secure Invidious node domain to stream ad-free
-            var urlString = "https://yewtu.be" + firstSong + "?playlist=" + remainingVideos + "&autoplay=1&playsinline=1&controls=1";
+            var urlString = "https://yewtu.be/embed/" + firstSong + "?playlist=" + remainingVideos + "&autoplay=1&playsinline=1&controls=1";
             
             targetDiv.innerHTML = 
                 '<iframe ' +
