@@ -23,7 +23,7 @@
             <div id="placeholder-text">Enter Video IDs and tap Play</div>
         </div>
     </div>
-    <script>
+       <script>
         function startPlaylist() {
             var inputText = document.getElementById('video-input').value;
             var ids = inputText.split(',').map(function(id) { return id.trim(); }).filter(function(id) { return id.length > 0; });
@@ -44,7 +44,6 @@
                     restOfSongs[j] = temp;
                 }
                 
-                // Combine them back: Index 0 is strictly locked, followed by the random mix
                 finalPlaylist = [firstSong].concat(restOfSongs);
             } else {
                 finalPlaylist = ids;
@@ -53,11 +52,11 @@
             document.getElementById('placeholder-text').style.display = 'none';
             var targetDiv = document.getElementById('player');
             
-            // Generate the string of remaining tracks for the background queue
+            // Build the playlist layout logic for the alternative player engine
             var remainingVideos = finalPlaylist.slice(1).join(',');
             
-            // FIXED: We explicitly append '&index=0' to force YouTube's player to start on your locked first song 
-            var urlString = "https://www.youtube-nocookie.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&index=0&autoplay=1&playsinline=1&controls=1";
+            // FIXED: Using a public secure Invidious node domain to stream ad-free
+            var urlString = "https://yewtu.be" + firstSong + "?playlist=" + remainingVideos + "&autoplay=1&playsinline=1&controls=1";
             
             targetDiv.innerHTML = 
                 '<iframe ' +
@@ -65,7 +64,6 @@
                     'height="100%" ' +
                     'src="' + urlString + '" ' +
                     'frameborder="0" ' +
-                    'referrerpolicy="strict-origin-when-cross-origin" ' +
                     'allow="autoplay; encrypted-media" ' +
                     'allowfullscreen>' +
                 '</iframe>';
