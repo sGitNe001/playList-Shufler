@@ -43,9 +43,10 @@
                     restOfSongs[i] = restOfSongs[j];
                     restOfSongs[j] = temp;
                 }
-                
+                alert("Addring to first song" + firstSong);
                 finalPlaylist = [firstSong].concat(restOfSongs);
             } else {
+                alert("ElseList");
                 finalPlaylist = ids;
             }
 
