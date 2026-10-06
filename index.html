@@ -23,7 +23,8 @@
             <div id="placeholder-text">Enter Video IDs and tap Play</div>
         </div>
     </div>
-       <script>
+
+    <script>
         function startPlaylist() {
             var inputText = document.getElementById('video-input').value;
             var ids = inputText.split(',').map(function(id) { return id.trim(); }).filter(function(id) { return id.length > 0; });
@@ -31,42 +32,45 @@
             if (ids.length === 0) return alert("Please enter at least one video ID.");
 
             var finalPlaylist = [];
-            var firstSong = ids[0]; // Isolate the true first song
+            var firstSong = ids[0]; // Anchor onto your first song choice safely
 
             if (ids.length > 1) {
                 var restOfSongs = ids.slice(1);
 
-                // Fisher-Yates Shuffle Algorithm (Shuffles ONLY the rest of the songs)
+                // Fisher-Yates Shuffle Algorithm (Shuffles ONLY the rest of the queue)
                 for (var i = restOfSongs.length - 1; i > 0; i--) {
                     var j = Math.floor(Math.random() * (i + 1));
                     var temp = restOfSongs[i];
                     restOfSongs[i] = restOfSongs[j];
                     restOfSongs[j] = temp;
                 }
-                alert("Addring to first song" + firstSong);
+                
                 finalPlaylist = [firstSong].concat(restOfSongs);
+                alert("first Song")
             } else {
-                alert("ElseList");
                 finalPlaylist = ids;
+                Alert("Else");
             }
 
             document.getElementById('placeholder-text').style.display = 'none';
             var targetDiv = document.getElementById('player');
             
-            // Build the playlist layout logic for the alternative player engine
             var remainingVideos = finalPlaylist.slice(1).join(',');
             
-            // FIXED: Using a public secure Invidious node domain to stream ad-free
-            var urlString = "https:/yt.chocolatemoo53.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&autoplay=1&playsinline=1&controls=1";
-            
+            // FIXED: Using secure official youtube-nocookie embedding to avoid 404s and pass strict origin handshakes
+            var urlString = "https://youtube-nocookie.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&index=0&autoplay=1&playsinline=1&controls=1";
+            alert("F "+firstSong + " Rest " + remainingVideos);
             targetDiv.innerHTML = 
                 '<iframe ' +
                     'width="100%" ' +
                     'height="100%" ' +
                     'src="' + urlString + '" ' +
                     'frameborder="0" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
                     'allow="autoplay; encrypted-media" ' +
                     'allowfullscreen>' +
                 '</iframe>';
         }
     </script>
+</body>
+</html>
