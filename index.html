@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>YouTube Custom Shuffler</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Controls -->
+        <div class="sidebar">
+            <h2>YouTube Shuffler</h2>
+            <p class="instruction">Enter YouTube Video IDs (separated by commas):</p>
+            <textarea id="video-input">ATflA6WOy0I, Np28O3Y_P2o, re88S-5fpmA, KRJFEve5pU4, 17ZHT4WbSfw, jTNu-R9KA-4, m-EsAtQyrTw</textarea>
+            <button id="play-btn" onclick="startPlaylist()">🔀 Play Shuffled Queue</button>
+        </div>
+
+        <!-- Video Player Window -->
+        <div class="player-container">
+            <div id="player"></div>
+            <div id="placeholder-text">Enter Video IDs and tap Play</div>
+        </div>
+    </div>
+
+    <script>
+        function startPlaylist() {
+            var inputText = document.getElementById('video-input').value;
+            var ids = inputText.split(',').map(function(id) { return id.trim(); }).filter(function(id) { return id.length > 0; });
+
+            if (ids.length === 0) return alert("Please enter at least one video ID.");
+
+            var finalPlaylist = [];
+            if (ids.length > 1) {
+                var firstSong = ids[0]; 
+                var restOfSongs = ids.slice(1);
+
+                // Fisher-Yates Shuffle Algorithm
+                for (var i = restOfSongs.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var temp = restOfSongs[i];
+                    restOfSongs[i] = restOfSongs[j];
+                    restOfSongs[j] = temp;
+                }
+                
+                finalPlaylist = [firstSong].concat(restOfSongs);
+            } else {
+                finalPlaylist = ids;
+            }
+
+            document.getElementById('placeholder-text').style.display = 'none';
+            var targetDiv = document.getElementById('player');
+            
+            var firstVideo = finalPlaylist[0];
+            var remainingVideos = finalPlaylist.slice(1).join(',');
+            
+            // FIXED: Using youtube-nocookie.com domain to bypass security checks for local files
+            var urlString = "https://www.youtube-nocookie.com/embed/" + firstVideo + "?playlist=" + remainingVideos + "&autoplay=1&playsinline=1&controls=1";
+            
+            targetDiv.innerHTML = 
+                '<iframe ' +
+                    'width="100%" ' +
+                    'height="100%" ' +
+                    'src="' + urlString + '" ' +
+                    'frameborder="0" ' +
+                    'referrerpolicy="strict-origin-when-cross-origin" ' +
+                    'allow="autoplay; encrypted-media" ' +
+                    'allowfullscreen>' +
+                '</iframe>';
+        }
+    </script>
