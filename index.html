@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <script>
+      <script>
         function startPlaylist() {
             var inputText = document.getElementById('video-input').value;
             var ids = inputText.split(',').map(function(id) { return id.trim(); }).filter(function(id) { return id.length > 0; });
@@ -32,12 +32,12 @@
             if (ids.length === 0) return alert("Please enter at least one video ID.");
 
             var finalPlaylist = [];
-            var firstSong = ids[0]; // Anchor onto your first song choice safely
+            var firstSong = ids[0]; // Securely isolate the first song string
 
             if (ids.length > 1) {
                 var restOfSongs = ids.slice(1);
 
-                // Fisher-Yates Shuffle Algorithm (Shuffles ONLY the rest of the queue)
+                // Fisher-Yates Shuffle Algorithm (Randomizes only tracks 2 through the end)
                 for (var i = restOfSongs.length - 1; i > 0; i--) {
                     var j = Math.floor(Math.random() * (i + 1));
                     var temp = restOfSongs[i];
@@ -46,10 +46,8 @@
                 }
                 
                 finalPlaylist = [firstSong].concat(restOfSongs);
-                alert("first Song")
             } else {
                 finalPlaylist = ids;
-                Alert("Else");
             }
 
             document.getElementById('placeholder-text').style.display = 'none';
@@ -57,9 +55,9 @@
             
             var remainingVideos = finalPlaylist.slice(1).join(',');
             
-            // FIXED: Using secure official youtube-nocookie embedding to avoid 404s and pass strict origin handshakes
-            var urlString = "https://youtube-nocookie.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&index=0&autoplay=1&playsinline=1&controls=1";
-            alert("F "+firstSong + " Rest " + remainingVideos);
+            // FIXED: Returned to stable www.youtube.com and added '&loop=1' to force array queue rendering
+            var urlString = "https://www.youtube.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&index=0&loop=1&autoplay=1&playsinline=1&controls=1";
+            
             targetDiv.innerHTML = 
                 '<iframe ' +
                     'width="100%" ' +
@@ -72,5 +70,6 @@
                 '</iframe>';
         }
     </script>
+
 </body>
 </html>
