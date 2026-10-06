@@ -23,7 +23,6 @@
             <div id="placeholder-text">Enter Video IDs and tap Play</div>
         </div>
     </div>
-
     <script>
         function startPlaylist() {
             var inputText = document.getElementById('video-input').value;
@@ -32,11 +31,12 @@
             if (ids.length === 0) return alert("Please enter at least one video ID.");
 
             var finalPlaylist = [];
+            var firstSong = ids[0]; // Isolate the true first song
+
             if (ids.length > 1) {
-                var firstSong = ids[0]; 
                 var restOfSongs = ids.slice(1);
 
-                // Fisher-Yates Shuffle Algorithm
+                // Fisher-Yates Shuffle Algorithm (Shuffles ONLY the rest of the songs)
                 for (var i = restOfSongs.length - 1; i > 0; i--) {
                     var j = Math.floor(Math.random() * (i + 1));
                     var temp = restOfSongs[i];
@@ -44,6 +44,7 @@
                     restOfSongs[j] = temp;
                 }
                 
+                // Combine them back: Index 0 is strictly locked, followed by the random mix
                 finalPlaylist = [firstSong].concat(restOfSongs);
             } else {
                 finalPlaylist = ids;
@@ -52,11 +53,11 @@
             document.getElementById('placeholder-text').style.display = 'none';
             var targetDiv = document.getElementById('player');
             
-            var firstVideo = finalPlaylist[0];
+            // Generate the string of remaining tracks for the background queue
             var remainingVideos = finalPlaylist.slice(1).join(',');
             
-            // FIXED: Using youtube-nocookie.com domain to bypass security checks for local files
-            var urlString = "https://www.youtube-nocookie.com/embed/" + firstVideo + "?playlist=" + remainingVideos + "&autoplay=1&playsinline=1&controls=1";
+            // FIXED: We explicitly append '&index=0' to force YouTube's player to start on your locked first song 
+            var urlString = "https://www.youtube-nocookie.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&index=0&autoplay=1&playsinline=1&controls=1";
             
             targetDiv.innerHTML = 
                 '<iframe ' +
