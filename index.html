@@ -56,7 +56,7 @@
             var remainingVideos = finalPlaylist.slice(1).join(',');
             alert("first " + firstSong + " Rest " + remainingVideos);
             // FIXED: Returned to stable www.youtube.com and added '&loop=1' to force array queue rendering
-            var urlString = "https://www.youtube.com/embed/" + firstSong + "?playlist=" + remainingVideos + "&index=0&loop=1&autoplay=1&playsinline=1&controls=1";
+            var urlString = "https://www.youtube.com/embed/" + firstSong + "?playlist=" + finalPlaylist + "&index=0&loop=1&autoplay=1&playsinline=1&controls=1";
             alert(urlString);
             targetDiv.innerHTML = 
                 '<iframe ' +
